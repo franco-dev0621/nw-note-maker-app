@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
 import NavBar from './components/Navbar';
-import Buttons from './components/Buttons';
+import Main from './components/Main';
 
 function App() {
   return (
-    <div className="App" style={{backgroundColor: '#f1f1f1'}}>
+    <div>
       <NavBar />
-      <Buttons />
+      <Main />
     </div>
   );
 }
