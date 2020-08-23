@@ -21,6 +21,19 @@ export default class Main extends React.Component {
             console.log(error);
           })
       }
+    handleDelete(id, event){
+        axios.delete(`https://jsonbox.io/box_f3ad47a8484eb5897d71/${id}`)
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+      
+            const phrases = this.state.phrases.filter(item => item.id !== id);
+            this.setState({ phrases });
+          })
+          window.location = '/';
+    }
+    
+   
     
     handleChange = (event) => {
         this.setState({phrase: event.target.value});        
@@ -40,6 +53,8 @@ export default class Main extends React.Component {
         })
         window.location = '/';
     }
+
+    
 
     render() {
 
@@ -91,7 +106,10 @@ export default class Main extends React.Component {
                                     marginBottom: '10px',
                                     backgroundColor: '#afb3b0'
                                 }}>
-                                    <Button color="secondary">DEL</Button>
+                                    <Button 
+                                        color="secondary"
+                                        onClick={(event) => this.handleDelete(phrase._id, event)}
+                                    >DEL</Button>
                                     <Button color="warning" style={{backgroundColor: '#33c45a'}}>UPD</Button>
                                     <Button style={{width: '100%'}}>{phrase.phrase}</Button>
                             </ButtonGroup>                                                 
