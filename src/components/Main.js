@@ -8,8 +8,11 @@ export default class Main extends React.Component {
       super(props);
       this.state = {
           phrase:'',
-        phrases: []
+        phrases: [],         
+        notes: []     
         }; 
+
+        this.handleAddToText = this.handleAddToText.bind(this);
     }
     
     componentDidMount() {
@@ -21,6 +24,15 @@ export default class Main extends React.Component {
             console.log(error);
           })
       }
+
+    handleAddToText(phrase,event){        
+        this.setState({note: phrase})
+        console.log(this.state.note)
+        this.setState({ notes: [...this.state.notes, this.state.note]})        
+      }
+       
+    
+
     handleDelete(id, event){
         axios.delete(`https://jsonbox.io/box_f3ad47a8484eb5897d71/${id}`)
         .then(res => {
@@ -32,9 +44,7 @@ export default class Main extends React.Component {
           })
           window.location = '/';
     }
-    
-   
-    
+
     handleChange = (event) => {
         this.setState({phrase: event.target.value});        
     }
@@ -108,10 +118,14 @@ export default class Main extends React.Component {
                                 }}>
                                     <Button 
                                         color="secondary"
-                                        onClick={(event) => this.handleDelete(phrase._id, event)}
-                                    >DEL</Button>
-                                    <Button color="warning" style={{backgroundColor: '#33c45a'}}>UPD</Button>
-                                    <Button style={{width: '100%'}}>{phrase.phrase}</Button>
+                                        onClick={(event) => 
+                                            this.handleDelete(phrase._id, event)}
+                                    >DEL</Button>                                    
+                                    <Button 
+                                        style={{width: '100%'}}
+                                        onClick={(event) => 
+                                            this.handleAddToText(phrase.phrase, event)}
+                                    >{phrase.phrase}</Button>
                             </ButtonGroup>                                                 
                         ))}
                             
@@ -119,8 +133,10 @@ export default class Main extends React.Component {
                     </Paper>                   
                 </Col>                
                 <Col>
-                    <Paper>
-                    <TextField                        
+                    <Paper>                    
+                    <TextField         
+                        value={this.state.notes}                                     
+                        onChange={this.onChangeText}
                         id="outlined-multiline-static"                        
                         multiline
                         rows={17}                        
@@ -145,7 +161,7 @@ export default class Main extends React.Component {
                         variant="contained" 
                         color="primary"
                         style={{width: '45%'}}
-                    >SAVE</Button>
+                    >CLEAR</Button>
                     </Paper>
                 </Col>            
             </Row>                
