@@ -6,31 +6,39 @@ import axios from 'axios'
 export default class Main extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {phrase: []}; 
+      this.state = {
+          phrase:'',
+        phrases: []
+        }; 
     }
-
-      componentDidMount() {
-      axios.get('http://localhost:5001/exercises/')
-        .then(response => {
-          this.setState({ exercises: response.data })
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-
+    
+    componentDidMount() {
+    axios.get('https://jsonbox.io/box_f3ad47a8484eb5897d71/')
+          .then(response => {
+            this.setState({ phrases: response.data })
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
     
     handleChange = (event) => {
         this.setState({phrase: event.target.value});        
     }
 
-    handleSubmit = (event) => {        
+    handleSubmit = (event) => {      
+        event.preventDefault();  
         const phrase = {
             phrase: this.state.phrase
         }
         console.log(phrase);
         axios.post('https://jsonbox.io/box_f3ad47a8484eb5897d71/', phrase)
-        .then(res => console.log(res.data));        
+        .then(res => console.log(res.data));   
+        
+        this.setState({
+            phrase : ''
+        })
+        window.location = '/';
     }
 
     render() {
@@ -46,7 +54,7 @@ export default class Main extends React.Component {
                     <Form onSubmit={this.handleSubmit}>
                         <Container>
                         <TextField
-                            value={this.state.phraseInput}
+                            value={this.state.phrase}
                             onChange={this.handleChange}
                             id="outlined-helperText"
                             label="Enter New Phrase"
@@ -73,8 +81,9 @@ export default class Main extends React.Component {
                     </Form>
                     </Paper>
                     <Paper>
-                        <Container>
-                            <ButtonGroup                                 
+                        <Container> {this.state.phrases.map((phrase) => (
+                            <ButtonGroup   
+                                key={phrase._id}                              
                                 variant="contained" 
                                 style={{
                                     width: '100%', 
@@ -84,8 +93,10 @@ export default class Main extends React.Component {
                                 }}>
                                     <Button color="secondary">DEL</Button>
                                     <Button color="warning" style={{backgroundColor: '#33c45a'}}>UPD</Button>
-                                    <Button style={{width: '100%'}}>PHRASE</Button>
+                                    <Button style={{width: '100%'}}>{phrase.phrase}</Button>
                             </ButtonGroup>                                                 
+                        ))}
+                            
                         </Container>                    
                     </Paper>                   
                 </Col>                
