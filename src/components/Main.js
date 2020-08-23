@@ -1,4 +1,4 @@
-import { Container, Row, Col, Form, Alert } from 'reactstrap'
+import { Container, Row, Col, Form } from 'reactstrap'
 import { Paper, TextField, Button, ButtonGroup } from "@material-ui/core"
 import React from 'react'
 import axios from 'axios'
@@ -13,10 +13,12 @@ export default class Main extends React.Component {
         }; 
 
         this.handleAddToText = this.handleAddToText.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     
-    componentDidMount() {
-    axios.get('https://jsonbox.io/box_f3ad47a8484eb5897d71/')
+    async componentDidMount() {
+    await axios.get('https://jsonbox.io/box_f3ad47a8484eb5897d71/')
           .then(response => {
             this.setState({ phrases: response.data })
           })
@@ -25,16 +27,20 @@ export default class Main extends React.Component {
           })
       }
 
-    handleAddToText(phrase,event){        
+    handleAddToText (phrase,event) {    
+        event.preventDefault();    
         this.setState({note: phrase})
         console.log(this.state.note)
         this.setState({ notes: [...this.state.notes, this.state.note]})        
       }
        
+    onChangeText(event) {
+        this.setState({notes: event.target.value})
+    }
     
 
-    handleDelete(id, event){
-        axios.delete(`https://jsonbox.io/box_f3ad47a8484eb5897d71/${id}`)
+    async handleDelete(id, event){
+    await axios.delete(`https://jsonbox.io/box_f3ad47a8484eb5897d71/${id}`)
         .then(res => {
             console.log(res);
             console.log(res.data);
@@ -49,7 +55,7 @@ export default class Main extends React.Component {
         this.setState({phrase: event.target.value});        
     }
 
-    handleSubmit = (event) => {      
+    handleSubmit(event){      
         event.preventDefault();  
         const phrase = {
             phrase: this.state.phrase
