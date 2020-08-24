@@ -1,191 +1,30 @@
-import { Container, Row, Col, Form } from 'reactstrap'
-import { Paper, TextField, Button, ButtonGroup } from "@material-ui/core"
-import React from 'react'
-import axios from 'axios'
-import Clipboard from 'react-clipboard.js'
+import React, { Component } from 'react'
+import { Navbar, NavItem, Container, NavbarBrand, Nav } from 'reactstrap';
+import {NavLink} from 'react-router-dom';
 
-export default class Main extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-          phrase:'',
-        phrases: [],         
-        notes: []     
-        }; 
+import './main.css'
 
-        this.handleAddToText = this.handleAddToText.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);        
-    }
-    
-    async componentDidMount() {
-    await axios.get('https://jsonbox.io/box_f3ad47a8484eb5897d71/')
-          .then(response => {
-            this.setState({ phrases: response.data })
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      }
-
-    handleAddToText (phrase,event) {        
-        console.log(phrase)
-        this.setState({ notes: [...this.state.notes, phrase]})      
-      }
-
-    
- 
-    
-
-    async handleDelete(id, event){
-    await axios.delete(`https://jsonbox.io/box_f3ad47a8484eb5897d71/${id}`)
-        .then(res => {
-            console.log(res);
-            console.log(res.data);
-      
-            const phrases = this.state.phrases.filter(item => item.id !== id);
-            this.setState({ phrases });
-          })
-          window.location = '/';
-    }
-
-    handleChange = (event) => {
-        this.setState({phrase: event.target.value});        
-    }
-
-    onChangeText = (event) =>
-    this.setState({newNote: event.target.value})
-
-    async handleSubmit(event){      
-        event.preventDefault();  
-        const phrase = {
-            phrase: this.state.phrase
-        }
-        console.log(phrase);
-    await axios.post('https://jsonbox.io/box_f3ad47a8484eb5897d71/', phrase)
-        .then(res => console.log(res.data));   
-        
-        this.setState({
-            phrase : ''
-        })
-        window.location = '/';
-    }
-
-    
-
-    render() {            
-
-        const newNote =((this.state.notes).join('.'))
-
+export default class NavBar extends Component {
+    render() {
         return (
-            <Container style={{marginTop: '40px'}}>              
-            <Row>
-                <Col>
-                    
-                    <Paper style={{marginBottom: "20px"}}>
-                    <Form onSubmit={this.handleSubmit}>
-                        <Container>
-                        <TextField
-                            value={this.state.phrase}
-                            onChange={this.handleChange}
-                            id="outlined-helperText"
-                            label="Enter New Phrase"
-                            variant="outlined"
-                            style={{                                
-                                width: '100%',                         
-                                maringTop: '20px'                            
-                            }}                            
-                        />
-                        
-                            <Button 
-                                type="submit"
-                                value="submit"
-                                variant="contained" 
-                                color="primary"
-                                style={{                                
-                                    width: '100%',
-                                    marginBottom: "20px"                                                                    
-                                }}                                
-                            >
-                                Enter
-                            </Button>
-                        </Container>                        
-                    </Form>
-                    </Paper>
-                    <Paper>
-                        <Container> {this.state.phrases.map((phrase) => (
-                            <ButtonGroup   
-                                key={phrase._id}                              
-                                variant="contained" 
-                                style={{
-                                    width: '100%', 
-                                    marginTop: '10px',
-                                    marginBottom: '10px',
-                                    backgroundColor: '#afb3b0'
-                                }}>
-                                    <Button 
-                                        color="secondary"
-                                        onClick={(event) => 
-                                            this.handleDelete(phrase._id, event)}
-                                    >DEL</Button>                                    
-                                    <Button 
-                                        style={{width: '100%'}}
-                                        onClick={(event) => 
-                                            this.handleAddToText(phrase.phrase, event)}
-                                    >{phrase.phrase}</Button>
-                            </ButtonGroup>                                                 
-                        ))}
-                            
-                        </Container>                    
-                    </Paper>                   
-                </Col>                
-                <Col>
-                    <Paper>                    
-                    <TextField 
-                        id="noteTextArea"
-                        value={newNote}                                     
-                        onChange={this.onChangeText}
-                        id="outlined-multiline-static"                        
-                        multiline
-                        rows={17}                        
-                        variant="outlined"
-                        style={{
-                            padding: '10px',
-                            width: '100%'
-                        }}
-                    />
-                    
-
-                    </Paper>
-                    <Paper style={{
-                        padding: '10px',
-                        marginTop: '10px'                        
-                    }}>
-                    <Clipboard 
-                        data-clipboard-text={this.state.notes} 
-                        button-title="COPIED!"
-                        style={{
-                            borderRadius: '5px',
-                            height: '38px',
-                            width: '45%',
-                            borderColor: 'blue',
-                            backgroundColor: 'blue',
-                            color: 'white',
-                            marginTop: '6px',                                                    
-                        }}                        
-                    >COPY</Clipboard>
-                    {" "}
-                    <Button 
-                        data-clipboard-action="cut"
-                        data-clipboard-target="noteTextArea"
-                        variant="contained" 
-                        color="primary"
-                        style={{width: '45%'}}                        
-                    >CLEAR</Button>
-                    </Paper>
-                </Col>            
-            </Row>                
-        </Container>
+            <div>                
+                  <Navbar  className="navBar">
+                    <Nav>
+                      <NavItem>
+                        <NavLink style={{ textDecoration: 'none', textDecorationColor: 'light'}} to="/rently/">Rently  </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink to="/showmojo/">Show Mojo  </NavLink>    
+                      </NavItem>
+                      <NavItem>
+                        <NavLink to="/tt/">TT  </NavLink>      
+                      </NavItem>
+                      <NavItem>
+                        <NavLink to="/appff/">App FF</NavLink>     
+                      </NavItem>
+                    </Nav>
+                  </Navbar>                
+            </div>
         )
     }
 }
