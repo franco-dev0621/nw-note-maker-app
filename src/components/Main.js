@@ -2,6 +2,7 @@ import { Container, Row, Col, Form } from 'reactstrap'
 import { Paper, TextField, Button, ButtonGroup } from "@material-ui/core"
 import React from 'react'
 import axios from 'axios'
+import Clipboard from 'react-clipboard.js'
 
 export default class Main extends React.Component {
     constructor(props) {
@@ -14,7 +15,7 @@ export default class Main extends React.Component {
 
         this.handleAddToText = this.handleAddToText.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);        
     }
     
     async componentDidMount() {
@@ -27,16 +28,13 @@ export default class Main extends React.Component {
           })
       }
 
-    handleAddToText (phrase,event) {    
-        event.preventDefault();    
-        this.setState({note: phrase})
-        console.log(this.state.note)
-        this.setState({ notes: [...this.state.notes, this.state.note]})        
+    handleAddToText (phrase,event) {        
+        console.log(phrase)
+        this.setState({ notes: [...this.state.notes, phrase]})      
       }
-       
-    onChangeText(event) {
-        this.setState({notes: event.target.value})
-    }
+
+    
+ 
     
 
     async handleDelete(id, event){
@@ -55,13 +53,16 @@ export default class Main extends React.Component {
         this.setState({phrase: event.target.value});        
     }
 
-    handleSubmit(event){      
+    onChangeText = (event) =>
+    this.setState({newNote: event.target.value})
+
+    async handleSubmit(event){      
         event.preventDefault();  
         const phrase = {
             phrase: this.state.phrase
         }
         console.log(phrase);
-        axios.post('https://jsonbox.io/box_f3ad47a8484eb5897d71/', phrase)
+    await axios.post('https://jsonbox.io/box_f3ad47a8484eb5897d71/', phrase)
         .then(res => console.log(res.data));   
         
         this.setState({
@@ -72,9 +73,9 @@ export default class Main extends React.Component {
 
     
 
-    render() {
+    render() {            
 
-        
+        const newNote =((this.state.notes).join('.'))
 
         return (
             <Container style={{marginTop: '40px'}}>              
@@ -140,8 +141,9 @@ export default class Main extends React.Component {
                 </Col>                
                 <Col>
                     <Paper>                    
-                    <TextField         
-                        value={this.state.notes}                                     
+                    <TextField 
+                        id="noteTextArea"
+                        value={newNote}                                     
                         onChange={this.onChangeText}
                         id="outlined-multiline-static"                        
                         multiline
@@ -152,21 +154,33 @@ export default class Main extends React.Component {
                             width: '100%'
                         }}
                     />
+                    
+
                     </Paper>
                     <Paper style={{
                         padding: '10px',
                         marginTop: '10px'                        
                     }}>
-                    <Button 
-                        variant="contained" 
-                        color="primary"
-                        style={{width: '45%'}}
-                    >COPY</Button>
+                    <Clipboard 
+                        data-clipboard-text={this.state.notes} 
+                        button-title="COPIED!"
+                        style={{
+                            borderRadius: '5px',
+                            height: '38px',
+                            width: '45%',
+                            borderColor: 'blue',
+                            backgroundColor: 'blue',
+                            color: 'white',
+                            marginTop: '6px',                                                    
+                        }}                        
+                    >COPY</Clipboard>
                     {" "}
                     <Button 
+                        data-clipboard-action="cut"
+                        data-clipboard-target="noteTextArea"
                         variant="contained" 
                         color="primary"
-                        style={{width: '45%'}}
+                        style={{width: '45%'}}                        
                     >CLEAR</Button>
                     </Paper>
                 </Col>            
