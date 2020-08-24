@@ -1,13 +1,12 @@
 .navBar {    
-    background-color: #333;
+    background-color: #333;    
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
     width: 100%; /* Full width */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     z-index: 999999;
   }
-  
-  
+
   .navBar ul{
     padding: 0;
     margin: 0;

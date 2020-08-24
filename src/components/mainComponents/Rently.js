@@ -82,11 +82,12 @@ export default class Rently extends React.Component {
         const textArray = newNote.join('.')
 
         return (
-            <Container style={{marginTop: '40px'}}>              
+            <Container style={{marginTop: '40px'}}>  
+        
             <Row>
-                <Col>
-                    
+                <Col>                    
                     <Paper style={{marginBottom: "20px", marginTop: '80px'}}>
+                    <h3 style={{padding: '10px'}}>Rently</h3>
                     <Form onSubmit={this.handleSubmit}>
                         <Container>
                         <TextField

@@ -9,7 +9,7 @@ export default class NavBar extends Component {
         return (
             <div>                
                   <Navbar  className="navBar">
-                    <Nav>
+                    <Nav>                                 
                       <NavItem>
                         <NavLink style={{ textDecoration: 'none', textDecorationColor: 'light'}} to="/rently/">Rently  </NavLink>
                       </NavItem>

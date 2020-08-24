@@ -87,6 +87,7 @@ export default class Showmojo extends React.Component {
                 <Col>
                     
                     <Paper style={{marginBottom: "20px", marginTop: '80px'}}>
+                    <h3 style={{padding: '10px'}}>Show Mojo</h3>
                     <Form onSubmit={this.handleSubmit}>
                         <Container>
                         <TextField
