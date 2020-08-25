@@ -1,8 +1,11 @@
-import { Container, Row, Col, Form } from 'reactstrap'
+import { Container, Row, Col, Form} from 'reactstrap'
 import { Paper, TextField, Button, ButtonGroup } from "@material-ui/core"
 import React from 'react'
 import axios from 'axios'
-import Clipboard from 'react-clipboard.js'
+import Textbox from './Textbox';
+
+
+
 
 export default class Appff extends React.Component {
     constructor(props) {
@@ -37,6 +40,7 @@ export default class Appff extends React.Component {
 
     //deletes data from JSON API
     async handleDelete(id, event){
+        
     await axios.delete(`https://jsonbox.io/box_f3ad47a8484eb5897d71/appff/${id}`)
         .then(res => {
             console.log(res);
@@ -45,7 +49,8 @@ export default class Appff extends React.Component {
             const phrases = this.state.phrases.filter(item => item.id !== id);
             this.setState({ phrases });
           })
-          window.location.reload(false)
+         // window.location = '/rently'; 
+       
     }
 
     handleChange = (event) => {
@@ -54,7 +59,7 @@ export default class Appff extends React.Component {
 
     onChangeText = (event) => {
         this.setState({
-            noteTextArea: event.target.value
+            notes: event.target.notes
         })
     }
 
@@ -71,22 +76,30 @@ export default class Appff extends React.Component {
         this.setState({
             phrase : ''
         })
-        window.location.reload(false)
+       // const nwin = ngui.Window.get();      
+        //console.log(nwin)
+        //nwin.reloadIgnoringCache();
+       // window.location="/";
     }
 
     
 
     render() {            
 
-        const newNote = this.state.notes
-        const textArray = newNote.join('.')
+        const newPhrases = this.state.phrases
+        // sort ARRAY depening on when they are added to the API // DESC
+        newPhrases.sort((a,b) => (a._createdOn > b._createdOn) ? 1 : ((b._createdOn>a._createdOn) ? -1 : 0))
 
-        return (
-            <Container style={{marginTop: '40px'}}>              
+        
+        //const nwin = ngui.Window.get();      
+        //console.log(nwin)
+
+        return (            
+            
+            
             <Row>
-                <Col>
-                    
-                    <Paper style={{marginBottom: "20px", marginTop: '80px'}}>
+                <Col>                    
+                    <Paper style={{marginBottom: "20px", marginTop: '50px'}}>
                     <h3 style={{padding: '10px'}}>App FF</h3>
                     <Form onSubmit={this.handleSubmit}>
                         <Container>
@@ -111,7 +124,7 @@ export default class Appff extends React.Component {
                                 style={{                                
                                     width: '100%',
                                     marginBottom: "20px"                                                                    
-                                }}                                
+                                }}                                                                
                             >
                                 Enter
                             </Button>
@@ -119,7 +132,7 @@ export default class Appff extends React.Component {
                     </Form>
                     </Paper>
                     <Paper>
-                        <Container> {this.state.phrases.map((phrase) => (
+                        <Container> {newPhrases.map((phrase) => (
                             <ButtonGroup   
                                 key={phrase._id}                              
                                 variant="contained" 
@@ -135,6 +148,7 @@ export default class Appff extends React.Component {
                                             this.handleDelete(phrase._id, event)}
                                     >DEL</Button>                                    
                                     <Button 
+                                        
                                         style={{width: '100%'}}
                                         onClick={(event) => 
                                             this.handleAddToText(phrase.phrase, event)}
@@ -145,50 +159,15 @@ export default class Appff extends React.Component {
                         </Container>                    
                     </Paper>                   
                 </Col>                
+                
                 <Col>
-                <div style={{                    
-                    position: 'fixed',
-                    width: '43%'
-                }}>
-                    <Paper  style={{marginTop: '80px'}}>                    
-                    <TextField 
-                        id="noteTextArea"
-                        value={textArray}                                     
-                        onChange={this.onChangeText}                                              
-                        multiline
-                        rows={9}                        
-                        variant="outlined"
-                        style={{
-                            padding: '10px',
-                            width: '100%'
-                        }}
+                    <Textbox 
+                        value={(this.state.notes).join(' ')}
+                        text={this.state.notes}
                     />
-                    
-
-                    </Paper>
-                    <Paper style={{
-                        padding: '10px',
-                        marginTop: '10px'                        
-                    }}>
-                    <Clipboard 
-                        data-clipboard-text={this.state.notes} 
-                        button-title="COPIED!"
-                        style={{
-                            borderRadius: '5px',
-                            height: '38px',
-                            width: '100%',
-                            borderColor: 'blue',
-                            backgroundColor: 'blue',
-                            color: 'white',
-                            marginTop: '6px',                                                    
-                        }}
-                        onClick={(e) => this.handleClearText(window.location.reload(false))}
-                    >COPY</Clipboard>                                                    
-                    </Paper>
-                </div>
                 </Col>            
             </Row>                
-        </Container>
+        
         )
     }
 }

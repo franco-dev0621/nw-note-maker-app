@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Navbar, NavItem, Container, NavbarBrand, Nav } from 'reactstrap';
+import { Navbar, NavItem, Nav } from 'reactstrap';
 import {NavLink} from 'react-router-dom';
+
 
 import './main.css'
 
@@ -9,21 +10,21 @@ export default class NavBar extends Component {
         return (
             <div>                
                   <Navbar  className="navBar">
-                    <Nav>                                 
+                    <Nav>                                                    
                       <NavItem>
-                        <NavLink style={{ textDecoration: 'none', textDecorationColor: 'light'}} to="/rently/">Rently  </NavLink>
+                        <NavLink to="/rently">Rently  </NavLink>
                       </NavItem>
                       <NavItem>
-                        <NavLink to="/showmojo/">Show Mojo  </NavLink>    
+                        <NavLink to="/showmojo">Show Mojo  </NavLink>    
                       </NavItem>
                       <NavItem>
-                        <NavLink to="/tt/">TT  </NavLink>      
+                        <NavLink to="/tt">TT  </NavLink>      
                       </NavItem>
                       <NavItem>
-                        <NavLink to="/appff/">App FF</NavLink>     
+                        <NavLink to="/appff">App FF</NavLink>     
                       </NavItem>
                     </Nav>
-                  </Navbar>                
+                  </Navbar>                      
             </div>
         )
     }
